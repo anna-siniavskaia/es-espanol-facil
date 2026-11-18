@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+/.env
+/vendor/
+/node_modules/
+/database/seed.sql
+/static/img/learning-hero.png
