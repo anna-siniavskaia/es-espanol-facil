@@ -1,0 +1,17 @@
+name: Verify diploma demo
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docker-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start clean demo and verify data
+        run: sh scripts/demo.sh
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --no-color

@@ -1,6 +1,6 @@
 # Es Español Fácil
 
-A PHP and MySQL learning application for Spanish learners, with CEFR placement, graded reading, grammar, vocabulary, exercises, and progress tracking.
+A diploma web project built with PHP and MySQL for Spanish learners, with CEFR placement, graded reading, grammar, vocabulary, exercises, and progress tracking.
 
 ## Features
 
@@ -12,21 +12,17 @@ A PHP and MySQL learning application for Spanish learners, with CEFR placement, 
 
 The supplied source did not include a license or attribution record for the learning content or hero illustration. They remain in the local working copy, are ignored by Git, and are excluded from the committed snapshot until authorship and distribution rights are confirmed.
 
-## Local setup
+## Quick demo
 
-Requires Docker Desktop with Docker Compose. Create local credentials and start the app:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and replace both placeholder passwords with different local secrets. Then run:
+Requires Docker Desktop with Docker Compose. A clean demo with fictional starter content is created by one command:
 
 ```bash
-docker compose up --build
+sh scripts/demo.sh
 ```
 
-Open `http://127.0.0.1:8000` by default; set `APP_PORT` in `.env` if that port is occupied. The app and database ports are bound to local Docker networking; MySQL is not published on a host port. The app uses a dedicated MySQL user. Database initialization creates the schema on the first start of an empty database volume. The app starts without the learning content: learning tables remain empty until rights-approved data is imported locally.
+Open `http://127.0.0.1:8000`; set `APP_PORT` if that port is occupied. MySQL is not published on a host port. The demo uses local-only default credentials, which can be overridden with `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` in `.env`.
+
+The public seed contains a small original A1 lesson and five placement questions written specifically for this portfolio demo. It is intentionally not a copy of the larger diploma content whose redistribution rights have not been confirmed.
 
 To check the loaded data without putting the root password in shell history:
 
@@ -48,7 +44,7 @@ These changes address specific issues found during a source review; they do not 
 
 ## Data model
 
-The MySQL schema contains eight tables: levels, users, texts, grammar topics, vocabulary, exercises, user progress, and test results. The supplied source content contains 50 reading texts, 50 grammar topics, 300 vocabulary entries, and 535 exercises. The content is excluded from the tracked Git snapshot pending rights review, so a fresh clone does not include those learning materials.
+The MySQL schema contains eight tables: levels, users, texts, grammar topics, vocabulary, exercises, user progress, and test results. A fresh clone includes only a compact, original demo dataset. The larger source collection remains excluded pending a rights review.
 
 ## Project structure
 
@@ -56,12 +52,13 @@ The MySQL schema contains eight tables: levels, users, texts, grammar topics, vo
 config.php
 includes/                 Session, output, CSRF, and application helpers
 database/schema.sql       Database schema
+database/demo_seed.sql    Original synthetic portfolio dataset
 database/migrations/      Upgrade steps for an earlier local database
 docker/php/Dockerfile     PHP Apache image with PDO MySQL
 docker-compose.yml        Local app and database services
 static/                   Styles and scripts
 ```
 
-## Current verification status
+## Verification
 
-Docker Compose configuration and image build succeeded. PHP syntax checks passed for all 17 PHP files. On an isolated schema-only database, browser checks verified registration with fictional data, the empty placement-test state, profile loading, sign-out after the session-ID change, and denial of profile access after sign-out. An earlier browser check verified password sign-in and that GET logout returns Method not allowed. The other empty-content pages, malformed-answer handling, and invalid-token CSRF rejection have not been checked end-to-end. The project has no automated test suite. The hero image and learning-content seed remain local but are omitted from the Git snapshot. This does not establish production readiness or complete security.
+The `scripts/demo.sh` check rebuilds a clean database, waits for the web app, and verifies the starter row counts. GitHub Actions runs the same flow on every push and pull request. Earlier browser checks covered registration, profile loading, sign-out, password sign-in, and rejection of GET logout. This is a portfolio demo, not a production deployment or a complete security certification.
